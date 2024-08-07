@@ -13,17 +13,17 @@ const LogoutButton: React.FC = () => {
   const handleLogout = async () => {
     try {
       await signOut();
-      addNotification('Logged out successfully', 'success');
+      addNotification('Sesión Cerrada correctamente', 'success');
       router.push('/login'); // O la ruta que prefieras después del logout
     } catch (error) {
-      console.error('Logout error:', error);
-      addNotification('Failed to log out', 'error');
+      console.error('Error al cerrar sesion:', error);
+      addNotification('Error al cerrar sesion', 'error');
     }
   };
 
   return (
     <Button onClick={handleLogout}>
-      Log out
+      Cerrar Sesión
     </Button>
   );
 };

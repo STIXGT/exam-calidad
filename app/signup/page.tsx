@@ -23,7 +23,7 @@ const SignUpPage = () => {
     e.preventDefault();
     setDebugInfo('');
     if (password !== confirmPassword) {
-      addNotification('Passwords do not match', 'error');
+      addNotification('Las contraseñas deben ser iguales', 'error');
       return;
     }
 
@@ -42,15 +42,15 @@ const SignUpPage = () => {
       }
 
       if (data.user) {
-        addNotification('Registration successful! Please check your email to verify your account.', 'success');
+        addNotification('Registro exitoso! Porfavor revisa tu correo y verifica tu cuenta.', 'success');
         router.push('/login');
       } else {
-        addNotification('Something went wrong. Please try again.', 'error');
+        addNotification('Ocurrio un error, intento nuevamente', 'error');
       }
     } catch (error: any) {
-      console.error('Sign up error:', error);
+      console.error('Error al iniciar sesion:', error);
       setDebugInfo(`Error: ${error.message}, Error Code: ${error.code}, Status: ${error.status}`);
-      addNotification(`Sign up failed: ${error.message}`, 'error');
+      addNotification(`Algo salio mal: ${error.message}`, 'error');
     } finally {
       setLoading(false);
     }
@@ -60,12 +60,12 @@ const SignUpPage = () => {
     <div className="container mx-auto px-4 py-8">
       <Card className="max-w-md mx-auto">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">Sign Up</CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">Iniciar sesion</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSignUp} className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Correo</label>
               <Input
                 id="email"
                 type="email"
@@ -76,7 +76,7 @@ const SignUpPage = () => {
               />
             </div>
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">Contraseña</label>
               <Input
                 id="password"
                 type="password"
@@ -87,7 +87,7 @@ const SignUpPage = () => {
               />
             </div>
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirmar contraseña </label>
               <Input
                 id="confirmPassword"
                 type="password"
@@ -98,7 +98,7 @@ const SignUpPage = () => {
               />
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Signing up...' : 'Sign Up'}
+              {loading ? 'Iniciando sesion...' : 'Iniciar Sesión'}
             </Button>
           </form>
           {debugInfo && (
@@ -108,9 +108,9 @@ const SignUpPage = () => {
             </div>
           )}
           <p className="mt-4 text-center text-sm">
-            Already have an account?{' '}
+            Ya tiene una cuenta?{' '}
             <a href="/login" className="font-medium text-blue-600 hover:text-blue-500">
-              Log in
+              Inicie sesión
             </a>
           </p>
         </CardContent>

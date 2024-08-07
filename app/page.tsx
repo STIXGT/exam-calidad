@@ -1,71 +1,90 @@
 "use client";
 
-import React from 'react';
-import Link from 'next/link';
-import { useUser } from '@supabase/auth-helpers-react';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { Button } from '@/components/ui/button';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
-const MainPage = () => {
-  const user = useUser();
+export default function Home() {
+  const router = useRouter();
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const supabase = createClientComponentClient();
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+      setLoading(false);
+    };
+    checkUser();
+  }, [supabase.auth]);
+
+  if (loading) {
+    return <div className="flex justify-center items-center h-screen">Cargando...</div>;
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-8 text-center">Welcome to Task Management System</h1>
-      
+      <h1 className="text-4xl font-bold text-center mb-8">Bienvenido a CRM App</h1>
       {user ? (
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Hello, {user.email}</CardTitle>
-              <CardDescription>What would you like to do today?</CardDescription>
-            </CardHeader>
-            <CardContent className="flex flex-col space-y-4">
-              <Link href="/dashboard">
-                <Button className="w-full">Go to Dashboard</Button>
-              </Link>
-              <Link href="/tasks">
-                <Button className="w-full">Manage Tasks</Button>
-              </Link>
-              <Link href="/reports">
-                <Button className="w-full">View Reports</Button>
-              </Link>
-            </CardContent>
-          </Card>
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>¡Hola, {user.email}!</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="mb-4">Bienvenido de vuelta a tu CRM. ¿Qué te gustaría hacer hoy?</p>
+            <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
+              <Button onClick={() => router.push('/dashboard')}>Ir al Dashboard</Button>
+              <Button onClick={() => router.push('/clientes')} variant="outline">Ver Clientes</Button>
+              <Button onClick={() => router.push('/oportunidades')} variant="outline">Ver Oportunidades</Button>
+            </div>
+          </CardContent>
+        </Card>
       ) : (
-        <div className="space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Gestiona tus clientes y ventas de manera eficiente</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="mb-4">Nuestro CRM te ayuda a mantener un seguimiento de tus clientes y oportunidades de venta en un solo lugar.</p>
+            <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
+              <Button onClick={() => router.push('/login')}>Iniciar Sesión</Button>
+              <Button onClick={() => router.push('/signup')} variant="outline">Registrarse</Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+      <div className="mt-8">
+        <h2 className="text-2xl font-bold mb-4">Características principales:</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card>
             <CardHeader>
-              <CardTitle>Get Started</CardTitle>
-              <CardDescription>Sign in or create an account to start managing your tasks</CardDescription>
-            </CardHeader>
-            <CardContent className="flex justify-center space-x-4">
-              <Link href="/login">
-                <Button>Log In</Button>
-              </Link>
-              <Link href="/signup">
-                <Button variant="outline">Sign Up</Button>
-              </Link>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>About Our System</CardTitle>
+              <CardTitle>Gestión de Clientes</CardTitle>
             </CardHeader>
             <CardContent>
-              <ul className="list-disc list-inside space-y-2">
-                <li>Effortlessly manage your tasks</li>
-                <li>Track your progress with intuitive dashboards</li>
-                <li>Generate insightful reports</li>
-                <li>Collaborate with team members</li>
-              </ul>
+              <p>Mantén toda la información de tus clientes organizada y accesible.</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Seguimiento de Oportunidades</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Rastrea y gestiona tus oportunidades de venta de manera eficiente.</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Reportes Detallados</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Obtén insights valiosos con nuestros reportes personalizados.</p>
             </CardContent>
           </Card>
         </div>
-      )}
+      </div>
     </div>
   );
-};
-
-export default MainPage;
+}
