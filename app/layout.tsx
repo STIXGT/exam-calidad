@@ -1,27 +1,31 @@
-import { GeistSans } from "geist/font/sans";
+"use client";
+
 import "./globals.css";
-
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
-
-export const metadata = {
-  metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
-};
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { SessionContextProvider } from '@supabase/auth-helpers-react';
+import { useState } from 'react';
+import { NotificationProvider } from '@/contexts/NotificationContext';
+import Notifications from '@/components/Notifications';
+import Navigation from '@/components/Navigation';
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [supabase] = useState(() => createClientComponentClient());
   return (
-    <html lang="en" className={GeistSans.className}>
-      <body className="bg-background text-foreground">
-        <main className="min-h-screen flex flex-col items-center">
-          {children}
-        </main>
+    <html lang="en">
+      <body>
+        <SessionContextProvider supabaseClient={supabase}>
+          <NotificationProvider>
+            <Navigation />
+              <main className="container mx-auto mt-4">
+                {children}
+              </main>
+            <Notifications />
+          </NotificationProvider>
+        </SessionContextProvider>
       </body>
     </html>
   );
