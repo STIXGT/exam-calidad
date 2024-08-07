@@ -1,34 +1,33 @@
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { Task } from '@/types/task';
+import { Oportunidad } from '@/types/client';
 
 const supabase = createClientComponentClient();
 
-export async function getTasks(): Promise<Task[]> {
-  const { data: { user } } = await supabase.auth.getUser();
+export async function getOportunidades(): Promise<Oportunidad[]> {
   const { data, error } = await supabase
-    .from('tasks')
+    .from('oportunidades')
     .select('*')
-    .eq('user_id', user?.id)
-    .order('created_at', { ascending: false });
+    .order('fecha_cierre', { ascending: false });
   
   if (error) throw error;
   return data || [];
 }
 
-export async function createTask(task: Omit<Task, 'id' | 'created_at' | 'user_id'>): Promise<Task> {
+export async function createOportunidad(oportunidad: Omit<Oportunidad, 'id' | 'creado_por'>): Promise<Oportunidad> {
   const { data: { user } } = await supabase.auth.getUser();
+  
   const { data, error } = await supabase
-    .from('tasks')
-    .insert({ ...task, user_id: user?.id })
+    .from('oportunidades')
+    .insert({ ...oportunidad, creado_por: user?.id })
     .single();
   
   if (error) throw error;
   return data;
 }
 
-export async function updateTask(id: number, updates: Partial<Task>): Promise<Task> {
+export async function updateOportunidad(id: number, updates: Partial<Oportunidad>): Promise<Oportunidad> {
   const { data, error } = await supabase
-    .from('tasks')
+    .from('oportunidades')
     .update(updates)
     .eq('id', id)
     .single();
@@ -37,9 +36,9 @@ export async function updateTask(id: number, updates: Partial<Task>): Promise<Ta
   return data;
 }
 
-export async function deleteTask(id: number): Promise<void> {
+export async function deleteOportunidad(id: number): Promise<void> {
   const { error } = await supabase
-    .from('tasks')
+    .from('oportunidades')
     .delete()
     .eq('id', id);
   

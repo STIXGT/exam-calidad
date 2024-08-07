@@ -12,23 +12,26 @@ const Navigation: React.FC = () => {
     <nav className="bg-gray-800 text-white p-4">
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/" className="text-xl font-bold">
-          My App
+          CRM App
         </Link>
         <div className="space-x-4">
           <Link href="/dashboard" className="hover:text-gray-300">
             Dashboard
           </Link>
-          <Link href="/tasks" className="hover:text-gray-300">
-            Tasks
+          <Link href="/clientes" className="hover:text-gray-300">
+            Clientes
           </Link>
-          <Link href="/reports" className="hover:text-gray-300">
-            Reports
+          <Link href="/oportunidades" className="hover:text-gray-300">
+            Oportunidades
+          </Link>
+          <Link href="/reportes" className="hover:text-gray-300">
+            Reportes
           </Link>
           {user ? (
             <LogoutButton />
           ) : (
             <Link href="/login" className="hover:text-gray-300">
-              Login
+              Iniciar Sesión
             </Link>
           )}
         </div>
